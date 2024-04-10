@@ -202,6 +202,23 @@ inline void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, con
 }
 
 template<typename T>
+inline void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, const std::vector<T>& rows) {
+	std::string query;
+	try {
+		sess.startTransaction();
+		for (auto& value : rows) {
+			query = ToInsertString(value, tableName, "REPLACE INTO");
+			sess.sql(query).execute();
+		}
+		sess.commit();
+	}
+	catch (std::exception e) {
+		std::cout << e.what() << "\n" << "error from ReplaceInto:\n";
+		std::cout << query << "\n";
+	}
+}
+
+template<typename T>
 std::vector<T> Select(mysqlx::Session& sess, const std::string& tableName, const std::string& condition = "") {
 	std::vector<std::string> names = column_names<T>();
 	std::string selects = "SELECT ";
@@ -246,6 +263,13 @@ void Update(mysqlx::Session& sess, const T& object, const std::string& tableName
 		std::cout << e.what() << "\n" << "error from Update:\n";
 		std::cout << query << "\n";
 	}
+}
+
+bool table_exists(mysqlx::Session& sess, const std::string schema, const std::string& table) {
+	sess.sql("USE " + schema).execute();
+	auto query = fmt::format("SELECT* FROM information_schema.tables WHERE table_schema = '{0}' AND table_name = '{1}' LIMIT 1;", schema, table);
+	auto res = sess.sql(query).execute();
+	return res.count() != 0;
 }
 
 }
