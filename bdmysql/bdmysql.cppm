@@ -8,37 +8,37 @@
 
 export module bdmysql;
 
+using namespace boost::describe;
+
 export namespace bdmysql {
 
-inline std::string insert_value(int v) { return fmt::format("{0}", v); }
-inline std::string insert_value(float v) { return fmt::format("{0}", v); }
-inline std::string insert_value(double v) { return fmt::format("{0}", v); }
-inline std::string insert_value(const std::string& v) { return fmt::format("\"{0}\"", v); }
-inline std::string insert_value(const std::chrono::system_clock::time_point& v) { return fmt::format("FROM_UNIXTIME({0})", std::chrono::duration_cast<std::chrono::seconds>(v.time_since_epoch()).count()); }
+std::string insert_value(int v) { return fmt::format("{0}", v); }
+std::string insert_value(float v) { return fmt::format("{0}", v); }
+std::string insert_value(double v) { return fmt::format("{0}", v); }
+std::string insert_value(const std::string& v) { return fmt::format("\"{0}\"", v); }
+std::string insert_value(const std::chrono::system_clock::time_point& v) { return fmt::format("FROM_UNIXTIME({0})", std::chrono::duration_cast<std::chrono::seconds>(v.time_since_epoch()).count()); }
 
-inline std::string insert_value(const std::optional<int>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
-inline std::string insert_value(const std::optional<float>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
-inline std::string insert_value(const std::optional<double>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
-inline std::string insert_value(const std::optional<std::string>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
-inline std::string insert_value(const std::optional<std::chrono::system_clock::time_point>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
+std::string insert_value(const std::optional<int>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
+std::string insert_value(const std::optional<float>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
+std::string insert_value(const std::optional<double>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
+std::string insert_value(const std::optional<std::string>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
+std::string insert_value(const std::optional<std::chrono::system_clock::time_point>& v) { if (v.has_value()) { return insert_value(v.value()); } else { return "NULL"; } }
 
-inline void get_cell(int& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<int>(); }
-inline void get_cell(float& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<float>(); }
-inline void get_cell(double& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<double>(); }
-inline void get_cell(std::string& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<std::string>(); }
-inline void get_cell(std::chrono::system_clock::time_point& des, const mysqlx::Value& v) { if (!v.isNull()) des = std::chrono::system_clock::from_time_t(time_t{ 0 }) + std::chrono::seconds(v.get<int>()); }
+void get_cell(int& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<int>(); }
+void get_cell(float& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<float>(); }
+void get_cell(double& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<double>(); }
+void get_cell(std::string& des, const mysqlx::Value& v) { if (!v.isNull()) des = v.get<std::string>(); }
+void get_cell(std::chrono::system_clock::time_point& des, const mysqlx::Value& v) { if (!v.isNull()) des = std::chrono::system_clock::from_time_t(time_t{ 0 }) + std::chrono::seconds(v.get<int>()); }
 
-inline void get_cell(std::optional<int>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<int>(); } }
-inline void get_cell(std::optional<float>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<float>(); } }
-inline void get_cell(std::optional<double>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<double>(); } }
-inline void get_cell(std::optional<std::string>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<std::string>(); } }
-inline void get_cell(std::optional<std::chrono::system_clock::time_point>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = std::chrono::system_clock::from_time_t(time_t{ 0 }) + std::chrono::seconds(v.get<int>()); } }
+void get_cell(std::optional<int>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<int>(); } }
+void get_cell(std::optional<float>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<float>(); } }
+void get_cell(std::optional<double>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<double>(); } }
+void get_cell(std::optional<std::string>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = v.get<std::string>(); } }
+void get_cell(std::optional<std::chrono::system_clock::time_point>& des, const mysqlx::Value& v) { if (!v.isNull()) { des = std::chrono::system_clock::from_time_t(time_t{ 0 }) + std::chrono::seconds(v.get<int>()); } }
 
 
 template<typename T>
 inline std::vector<std::string> column_names() {
-	using namespace boost::describe;
-
 	using Bd = describe_bases<T, mod_any_access>;
 	using Md = describe_members<T, mod_any_access>;
 
@@ -69,11 +69,8 @@ inline std::string set_str(const std::string& name, const std::optional<double>&
 inline std::string set_str(const std::string& name, const std::optional<std::string>& v) { if (v.has_value()) { return set_str(name, v.value()); } else { return ""; } }
 inline std::string set_str(const std::string& name, const std::optional<std::chrono::system_clock::time_point>& v) { if (v.has_value()) { return set_str(name, v.value()); } else { return ""; } }
 
-
 template<typename T>
 void update_sets(const T& t, std::string& sets) {
-	using namespace boost::describe;
-
 	using Bd = describe_bases<T, mod_any_access>;
 	using Md = describe_members<T, mod_any_access>;
 	int i = 0;
@@ -90,8 +87,6 @@ void update_sets(const T& t, std::string& sets) {
 
 template<typename T>
 void primary_column_assignments(const T& t, const std::vector<std::string>& primary_keys, std::string& condition) {
-	using namespace boost::describe;
-
 	using Bd = describe_bases<T, mod_any_access>;
 	using Md = describe_members<T, mod_any_access>;
 	int i = 0;
@@ -111,8 +106,6 @@ void primary_column_assignments(const T& t, const std::vector<std::string>& prim
 
 template<typename T>
 void read_row(T& t, mysqlx::Row& row) {
-	using namespace boost::describe;
-
 	using Bd = describe_bases<T, mod_any_access>;
 	using Md = describe_members<T, mod_any_access>;
 	int i = 0;
@@ -124,8 +117,6 @@ void read_row(T& t, mysqlx::Row& row) {
 
 template<typename T>
 inline std::string GetCreateTableQuery(const std::string& tableName, const std::string& primaryKey, const std::string& engine) {
-	using namespace boost::describe;
-
 	using Bd = describe_bases<T, mod_any_access>;
 	using Md = describe_members<T, mod_any_access>;
 
@@ -173,9 +164,14 @@ void CreateTableIfNotExists(mysqlx::Session& sess, const std::string& tableName,
 }
 
 template<typename T>
-inline std::string ToInsertString(const T& t, const std::string& tableName, const std::string& insertType = "INSERT INTO") {
-	using namespace boost::describe;
+void CreateTableIfNotExists(const std::tuple<std::string, std::string>& addr_pwd, const std::string& schemaName, const std::string& tableName, const std::string& primaryKey, const std::string& engine) {
+	mysqlx::Session sess(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd));
+	sess.sql("USE " + schemaName).execute();
+	return CreateTableIfNotExists<T>(sess, tableName, primaryKey, engine);
+}
 
+template<typename T>
+inline std::string ToInsertString(const T& t, const std::string& tableName, const std::string& insertType = "INSERT INTO") {
 	using Bd = describe_bases<T, mod_any_access>;
 	using Md = describe_members<T, mod_any_access>;
 
@@ -189,7 +185,7 @@ inline std::string ToInsertString(const T& t, const std::string& tableName, cons
 }
 
 template<typename T>
-inline void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, const T& value) {
+void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, const T& value) {
 	std::string query;
 	try {
 		query = ToInsertString(value, tableName, "REPLACE INTO");
@@ -202,7 +198,7 @@ inline void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, con
 }
 
 template<typename T>
-inline void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, const std::vector<T>& rows) {
+void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, const std::vector<T>& rows) {
 	std::string query;
 	try {
 		sess.startTransaction();
@@ -216,6 +212,29 @@ inline void ReplaceInto(mysqlx::Session& sess, const std::string& tableName, con
 		std::cout << e.what() << "\n" << "error from ReplaceInto:\n";
 		std::cout << query << "\n";
 	}
+}
+
+template<typename T>
+void ReplaceInto(const std::tuple<std::string, std::string>& addr_pwd, const std::string& schemaName, const std::string& tableName, const T& value) {
+	mysqlx::Session sess(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd));
+	if (!schemaName.empty())
+		sess.sql("USE " + schemaName).execute();
+	return ReplaceInto(sess, tableName, value);
+}
+
+template<typename T>
+void ReplaceInto(const std::tuple<std::string, std::string>& addr_pwd, const std::string& schemaName, const std::string& tableName, const std::vector<T>& rows) {
+	mysqlx::Session sess(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd));
+	if (!schemaName.empty())
+		sess.sql("USE " + schemaName).execute();
+	return ReplaceInto(sess, tableName, rows);
+}
+
+void Execute(const std::tuple<std::string, std::string>& addr_pwd, const std::string& schemaName, const std::string& query) {
+	mysqlx::Session sess(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd));
+	if (!schemaName.empty())
+		sess.sql("USE " + schemaName).execute();
+	sess.sql(query).execute();
 }
 
 template<typename T>
@@ -249,6 +268,14 @@ std::vector<T> Select(mysqlx::Session& sess, const std::string& tableName, const
 }
 
 template<typename T>
+std::vector<T> Select(const std::tuple<std::string, std::string>& addr_pwd, const std::string& schemaName, const std::string& tableName, const std::string& condition = "") {
+	mysqlx::Session sess(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd));
+	if (!schemaName.empty())
+		sess.sql("USE " + schemaName).execute();
+	return Select<T>(sess, tableName, condition);
+}
+
+template<typename T>
 void Update(mysqlx::Session& sess, const T& object, const std::string& tableName, const std::vector<std::string>& primary_keys, const std::string& condition = "") {
 	std::string query;
 	try {
@@ -265,11 +292,79 @@ void Update(mysqlx::Session& sess, const T& object, const std::string& tableName
 	}
 }
 
+template<typename T>
+void Update(const std::tuple<std::string, std::string>& addr_pwd, const std::string& schemaName, const T& object, const std::string& tableName, const std::vector<std::string>& primary_keys, const std::string& condition = "") {
+	mysqlx::Session sess(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd));
+	if (!schemaName.empty())
+		sess.sql("USE " + schemaName).execute();
+	return Update<T>(sess, object, tableName, primary_keys, condition);
+}
+
 bool table_exists(mysqlx::Session& sess, const std::string schema, const std::string& table) {
-	sess.sql("USE " + schema).execute();
+	if (!schema.empty())
+		sess.sql("USE " + schema).execute();
 	auto query = fmt::format("SELECT* FROM information_schema.tables WHERE table_schema = '{0}' AND table_name = '{1}' LIMIT 1;", schema, table);
 	auto res = sess.sql(query).execute();
 	return res.count() != 0;
 }
+
+class Session {
+public:
+	std::unique_ptr<mysqlx::Session> sess;
+	Session(const std::tuple<std::string, std::string>& addr_pwd) {
+		sess = std::unique_ptr<mysqlx::Session>(new mysqlx::Session(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd)));
+	}
+	Session(const std::tuple<std::string, std::string>& addr_pwd, const std::string schemaName) {
+		sess = std::unique_ptr<mysqlx::Session>(new mysqlx::Session(std::get<0>(addr_pwd), 33060, "root", std::get<1>(addr_pwd)));
+		if (!schemaName.empty())
+			sess->sql("USE " + schemaName).execute();
+	}
+	Session(const std::string& addr, const std::string& pwd) {
+		sess = std::unique_ptr<mysqlx::Session>(new mysqlx::Session(addr, 33060, "root", pwd));
+	}
+	template<typename T>
+	void ReplaceInto(const std::string& tableName, const T& value) {
+		std::string query;
+		try {
+			query = ToInsertString(value, tableName, "REPLACE INTO");
+			sess->sql(query).execute();
+		}
+		catch (std::exception e) {
+			std::cout << e.what() << "\n" << "error from ReplaceInto:\n";
+			std::cout << query << "\n";
+		}
+	}
+	template<typename T>
+	void ReplaceInto(const std::string& tableName, const std::vector<T>& rows) { return ReplaceInto(*sess, tableName, rows); }
+	template<typename T>
+	std::vector<T> Select(const std::string& tableName, const std::string& condition = "") {
+		std::vector<std::string> names = column_names<T>();
+		std::string selects = "SELECT ";
+		for (auto& name : names) {
+			selects += name + ",";
+		}
+		selects.pop_back();
+		auto query = fmt::format("{0} FROM {1}", selects, tableName);
+		if (!condition.empty()) { query += " WHERE " + condition; }
+
+		std::vector<T> ret;
+
+		try {
+			auto res = sess->sql(query).execute();
+			std::list<mysqlx::Row> rows = res.fetchAll();
+			for (auto& row : rows) {
+				T object;
+				read_row(object, row);
+				ret.push_back(object);
+			}
+		}
+		catch (std::exception e) {
+			std::cout << e.what() << "\n" << "error from Select:\n";
+			std::cout << query << "\n";
+			throw e;
+		}
+		return ret;
+	}
+};
 
 }
